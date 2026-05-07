@@ -1,11 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"> <head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="UTF-8">
     <title>Prueba Spring Boot</title>
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
     <h1>Ejecutando Proyecto</h1>
+	<div id="div-start-session">
 
+	    <form>
+
+	        <input name="usuario"
+	               id="usuario"
+	               type="text"
+	               placeholder="usuario">
+
+	        <input name="password"
+	               id="password"
+	               type="password"
+	               placeholder="contraseña">
+
+	        <button type="submit"
+	                formaction="/inicio-sesion"
+	                formmethod="POST">
+	            Login
+	        </button>
+
+	        <button type="submit"
+	                formaction="/registro"
+	                formmethod="POST">
+	            Registrarse
+	        </button>
+
+	    </form>
+
+	    <p th:if="${mensajeLogin != null}"
+	       th:text="${mensajeLogin}"></p>
+
+	    <p th:if="${mensajeRegistro != null}"
+	       th:text="${mensajeRegistro}"></p>
+
+	</div>
     <form th:action="@{/pulsarBoton}" method="POST">
         <button type="submit">Púlsame</button>
     </form>
