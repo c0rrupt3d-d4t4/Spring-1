@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"> <head>
+    <meta charset="UTF-8">
+    <title>Prueba Spring Boot</title>
+</head>
+<body>
+    <h1>Ejecutando Proyecto</h1>
+
+    <form th:action="@{/pulsarBoton}" method="POST">
+        <button type="submit">Púlsame</button>
+    </form>
+
+    <hr>
+
+    <p th:if="${resultado != null}" th:text="${resultado}"></p>
+
+</body>
+</html>
