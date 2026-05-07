@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model; // <--- ASEGÚRATE DE QUE SEA ESTE
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import pack.main.model.Mensaje;
 import pack.main.repository.MensajeRepository;
@@ -33,5 +34,15 @@ public class CoPrincipal {
         model.addAttribute("resultado", "Guardado en Mongo con ID: " + m.getId());
         
         return "index"; 
+    }
+    @PostMapping("/inicio-sesion")
+    public String inicioSesion(@RequestParam String usuario, @RequestParam String password) {
+        
+        // Ahora ya puedes usar las variables
+        System.out.println("Usuario recibido: " + usuario);
+        System.out.println("Password recibida: " + password);
+        
+        
+        return "index";
     }
 }

@@ -8,10 +8,11 @@
 <body>
     <h1>Ejecutando Proyecto</h1>
 	<div id="div-start-session">
-		<form action="inicio-sesion" method="POST">
-			<input id="user" type="text" placeholder="usuario">
-			<input id="password" type="text" placeholder="contraseña">
-		</form>
+	    <form th:action="@{/inicio-sesion}" method="POST">
+	        <input name="usuario" type="text" placeholder="usuario">
+	        <input name="password" type="password" placeholder="contraseña">
+	        <button type="submit">Entrar</button>
+	    </form>
 	</div>
     <form th:action="@{/pulsarBoton}" method="POST">
         <button type="submit">Púlsame</button>
