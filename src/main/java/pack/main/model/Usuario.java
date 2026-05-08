@@ -4,7 +4,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "usuarios")
-
 // ARCHIVO PARA CREAR USUARIOS
 
 public class Usuario {

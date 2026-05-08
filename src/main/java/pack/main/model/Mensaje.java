@@ -11,7 +11,7 @@ public class Mensaje {
 	private String id; // Mongo usará esto para el ID autogenerado
 	private String contenido;
 
-	// Constructor vacío (obligatorio para Spring)
+	// Constructor vacio (obligatorio para Spring)
 	public Mensaje() {
 	}
 

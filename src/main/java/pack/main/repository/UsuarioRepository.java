@@ -7,8 +7,15 @@ import pack.main.model.Usuario;
 
 @Repository
 public interface UsuarioRepository extends MongoRepository<Usuario, String> {
+	/*
+	 * Esta extension que usamos da metodos que directamente hacen:
+	 *  save(usuario): insertar o actualizar 
+	 * findAll(): un SELECT de todos los usuarios
+	 * deleteById(id): DELETE
+	 */
+	// metodo para el login, te devuelve un Usuario o sino null
+	Usuario findByNombreUsuarioAndPassword(String nombreUsuario, String password);
 
-    Usuario findByNombreUsuarioAndPassword(String nombreUsuario, String password);
-
-    Usuario findByNombreUsuario(String nombreUsuario);
+	// busca si existe ese nombre de usuario 
+	Usuario findByNombreUsuario(String nombreUsuario);
 }

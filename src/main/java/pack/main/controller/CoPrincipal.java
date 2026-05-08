@@ -19,83 +19,80 @@ public class CoPrincipal {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-    // Carga la página por primera vez (GET)
-    @GetMapping(value = {"/index", "/"})
-    public String idx() {
-        return "index";
-    }
+	// Carga la página por primera vez (GET)
+	@GetMapping(value = { "/index", "/", "/index.html" })
+	public String idx() {
 
-    // Maneja el clic del botón (POST)
-    @PostMapping("/pulsarBoton")
-    public String procesarClic(Model model) {
-        // 1. Creamos el objeto con el texto que queramos
-        Mensaje m = new Mensaje("Alguien pulsó el botón");
+		return "index";
+	}
 
-        // 2. LO GUARDAMOS EN MONGODB
-        repositorio.save(m);
+	// Maneja el clic del botón (POST)
+	@PostMapping("/pulsarBoton")
+	public String procesarClic(Model model) {
+		// 1. Creamos el objeto con el texto que queramos
+		Mensaje m = new Mensaje("Alguien pulsó el botón");
 
-        // 3. Pasamos el ID a la web para confirmar que funcionó
-        model.addAttribute("resultado", "Guardado en Mongo con ID: " + m.getId());
-        
-        return "index"; 
-    }
-    
-    // HE CAMBIADO ESTO DEL LOGIN
-    
-    @PostMapping("/inicio-sesion")
-    public String inicioSesion(
-            @RequestParam String usuario,
-            @RequestParam String password,
-            Model model) {
+		// 2. LO GUARDAMOS EN MONGODB
+		repositorio.save(m);
 
-        Usuario usuarioEncontrado =
-                usuarioRepository.findByNombreUsuarioAndPassword(usuario, password);
+		// 3. Pasamos el ID a la web para confirmar que funcionó
+		model.addAttribute("resultado", "Guardado en Mongo con ID: " + m.getId());
 
-        if (usuarioEncontrado == null) {
+		return "index";
+	}
 
-            model.addAttribute("mensajeLogin",
-                    "Los datos introducidos no son correctos");
+	// HE CAMBIADO ESTO DEL LOGIN
 
-            return "index";
-        }
+	@PostMapping("/inicio-sesion")
+	public String inicioSesion(@RequestParam String usuario, @RequestParam String password, Model model) {
+		String vista;
+		Usuario usuarioEncontrado = usuarioRepository.findByNombreUsuarioAndPassword(usuario, password);
 
-        model.addAttribute("nombreUsuario",
-                usuarioEncontrado.getNombreUsuario());
+		if (usuarioEncontrado == null) {
 
-        model.addAttribute("admin",
-                usuarioEncontrado.isAdmin());
+			model.addAttribute("mensajeLogin", "Los datos introducidos no son correctos");
+			vista = "index";
+		} else {
+			model.addAttribute("nombreUsuario", usuarioEncontrado.getNombreUsuario());
+			model.addAttribute("admin", usuarioEncontrado.isAdmin());
+			
+			if (usuarioEncontrado.isAdmin()) {
 
-        // TE DEVUELVE PANEL QUE SERIA EL SEGUNDO HTML
-        return "panel";
-    }
-    
-    // HE CAMBIADO ESTO NUEVO BOTON DE REGISTRO
-    
-    @PostMapping("/registro")
-    public String registro(
-            @RequestParam String usuario,
-            @RequestParam String password,
-            Model model) {
+				vista ="panelAdmin";
+				
+			} else {
+				
+				vista ="panelUser";
+			}
 
-        Usuario existe =
-                usuarioRepository.findByNombreUsuario(usuario);
+			
+		}
+		// TE DEVUELVE PANEL QUE SERIA EL SEGUNDO HTML
+		return vista;
+	}
 
-        if (existe != null) {
+	// HE CAMBIADO ESTO NUEVO BOTON DE REGISTRO
 
-            model.addAttribute("mensajeRegistro",
-                    "Ese usuario ya existe");
+	@PostMapping("/registro")
+	public String registro(@RequestParam String usuario, @RequestParam String password, Model model) {
+		if (usuario.isEmpty() || password.isEmpty()) {
+			model.addAttribute("mensajeRegistro", "Esta vacio el nombre o usuario");
+		} else {
 
-            return "index";
-        }
+			Usuario existe = usuarioRepository.findByNombreUsuario(usuario);
 
-        Usuario nuevoUsuario =
-                new Usuario(usuario, password, false);
+			if (existe != null) {
 
-        usuarioRepository.save(nuevoUsuario);
+				model.addAttribute("mensajeRegistro", "Ese usuario ya existe");
 
-        model.addAttribute("mensajeRegistro",
-                "Se ha registrado correctamente");
+			}
 
-        return "index";
-    }
+			Usuario nuevoUsuario = new Usuario(usuario, password, false);
+
+			usuarioRepository.save(nuevoUsuario);
+
+			model.addAttribute("mensajeRegistro", "Se ha registrado correctamente");
+		}
+		return "index";
+	}
 }

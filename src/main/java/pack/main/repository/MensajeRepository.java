@@ -8,6 +8,5 @@ import pack.main.model.Mensaje;
 @Repository
 public interface MensajeRepository extends MongoRepository<Mensaje, String> {
 	
-	// Al heredar de MongoRepository, 
-	//ya tienes métodos como .save() y .findAll()
+	// Al heredar de MongoRepository ya tienes métodos como .save() y .findAll()
 }

@@ -10,36 +10,30 @@ import pack.main.repository.UsuarioRepository;
 @Component
 public class InicializadorUsuarios implements CommandLineRunner {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
-    @Override
-    public void run(String... args) throws Exception {
-    	// CREAR USUARIOS INICIALES
-        System.out.println("INICIALIZADOR EJECUTADO");
+	@Override
+	public void run(String... args) throws Exception {
+		// CREAR USUARIOS INICIALES
+		System.out.println("INICIALIZADOR EJECUTADO");
 
-        if (usuarioRepository.findByNombreUsuario("admin") == null) {
+		if (usuarioRepository.findByNombreUsuario("admin") == null) {
 
-            Usuario admin = new Usuario(
-                    "admin",
-                    "admin",
-                    true);
+			Usuario admin = new Usuario("admin", "admin", true);
 
-            usuarioRepository.save(admin);
+			usuarioRepository.save(admin);
 
-            System.out.println("ADMIN CREADO");
-        }
+			System.out.println("ADMIN CREADO");
+		}
 
-        if (usuarioRepository.findByNombreUsuario("usuario") == null) {
+		if (usuarioRepository.findByNombreUsuario("usuario") == null) {
 
-            Usuario usuario = new Usuario(
-                    "usuario",
-                    "1234",
-                    false);
+			Usuario usuario = new Usuario("usuario", "1234", false);
 
-            usuarioRepository.save(usuario);
+			usuarioRepository.save(usuario);
 
-            System.out.println("USUARIO CREADO");
-        }
-    }
+			System.out.println("USUARIO CREADO");
+		}
+	}
 }
