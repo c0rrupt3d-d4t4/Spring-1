@@ -2,97 +2,205 @@ package pack.main.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model; // <--- ASEGÚRATE DE QUE SEA ESTE
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import pack.main.model.Mensaje;
-import pack.main.repository.MensajeRepository;
 import pack.main.model.Usuario;
+import pack.main.model.Producto;
+import pack.main.model.ItemPedido;
+import pack.main.model.Pedido;
+
+import pack.main.repository.MensajeRepository;
 import pack.main.repository.UsuarioRepository;
+import pack.main.repository.ProductoRepository;
+import pack.main.repository.PedidoRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class CoPrincipal {
-	@Autowired
-	private MensajeRepository repositorio;
-	@Autowired
-	private UsuarioRepository usuarioRepository;
 
-	// Carga la página por primera vez (GET)
-	@GetMapping(value = { "/index", "/", "/index.html" })
-	public String idx() {
+    @Autowired
+    private MensajeRepository repositorio;
 
-		return "index";
-	}
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-	// Maneja el clic del botón (POST)
-	@PostMapping("/pulsarBoton")
-	public String procesarClic(Model model) {
-		// 1. Creamos el objeto con el texto que queramos
-		Mensaje m = new Mensaje("Alguien pulsó el botón");
+    @Autowired
+    private ProductoRepository productoRepository;
 
-		// 2. LO GUARDAMOS EN MONGODB
-		repositorio.save(m);
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
-		// 3. Pasamos el ID a la web para confirmar que funcionó
-		model.addAttribute("resultado", "Guardado en Mongo con ID: " + m.getId());
+    // 🛒 CARRITO (simple, global)
+    private List<ItemPedido> carrito = new ArrayList<>();
+    private String usuarioActual = "";
 
-		return "index";
-	}
+    // INDEX
+    @GetMapping(value = {"/index", "/", "/index.html"})
+    public String idx() {
+        return "index";
+    }
 
-	// HE CAMBIADO ESTO DEL LOGIN
+    // BOTÓN PRUEBA
+    @PostMapping("/pulsarBoton")
+    public String procesarClic(Model model) {
 
-	@PostMapping("/inicio-sesion")
-	public String inicioSesion(@RequestParam String usuario, @RequestParam String password, Model model) {
-		String vista;
-		Usuario usuarioEncontrado = usuarioRepository.findByNombreUsuarioAndPassword(usuario, password);
+        Mensaje m = new Mensaje("Alguien pulsó el botón");
+        repositorio.save(m);
 
-		if (usuarioEncontrado == null) {
+        model.addAttribute("resultado", "Guardado en Mongo con ID: " + m.getId());
 
-			model.addAttribute("mensajeLogin", "Los datos introducidos no son correctos");
-			vista = "index";
-		} else {
-			model.addAttribute("nombreUsuario", usuarioEncontrado.getNombreUsuario());
-			model.addAttribute("admin", usuarioEncontrado.isAdmin());
-			
-			if (usuarioEncontrado.isAdmin()) {
+        return "index";
+    }
 
-				vista ="panelAdmin";
-				
-			} else {
-				
-				vista ="panelUser";
-			}
+    // LOGIN
+    @PostMapping("/inicio-sesion")
+    public String inicioSesion(@RequestParam String usuario,
+                               @RequestParam String password,
+                               Model model) {
 
-			
-		}
-		// TE DEVUELVE PANEL QUE SERIA EL SEGUNDO HTML
-		return vista;
-	}
+        Usuario usuarioEncontrado =
+                usuarioRepository.findByNombreUsuarioAndPassword(usuario, password);
 
-	// HE CAMBIADO ESTO NUEVO BOTON DE REGISTRO
+        if (usuarioEncontrado == null) {
 
-	@PostMapping("/registro")
-	public String registro(@RequestParam String usuario, @RequestParam String password, Model model) {
-		if (usuario.isEmpty() || password.isEmpty()) {
-			model.addAttribute("mensajeRegistro", "Esta vacio el nombre o usuario");
-		} else {
+            model.addAttribute("mensajeLogin", "Los datos introducidos no son correctos");
+            return "index";
+        }
 
-			Usuario existe = usuarioRepository.findByNombreUsuario(usuario);
+        usuarioActual = usuarioEncontrado.getNombreUsuario();
 
-			if (existe != null) {
+        model.addAttribute("nombreUsuario", usuarioActual);
 
-				model.addAttribute("mensajeRegistro", "Ese usuario ya existe");
+        if (usuarioEncontrado.isAdmin()) {
+            return "panelAdmin";
+        }
 
-			}
+        cargarVistaUsuario(model);
+        return "panelUser";
+    }
 
-			Usuario nuevoUsuario = new Usuario(usuario, password, false);
+    // REGISTRO
+    @PostMapping("/registro")
+    public String registro(@RequestParam String usuario,
+                           @RequestParam String password,
+                           Model model) {
 
-			usuarioRepository.save(nuevoUsuario);
+        if (usuario.isEmpty() || password.isEmpty()) {
+            model.addAttribute("mensajeRegistro", "Está vacío el usuario o contraseña");
+            return "index";
+        }
 
-			model.addAttribute("mensajeRegistro", "Se ha registrado correctamente");
-		}
-		return "index";
-	}
+        Usuario existe = usuarioRepository.findByNombreUsuario(usuario);
+
+        if (existe != null) {
+            model.addAttribute("mensajeRegistro", "Ese usuario ya existe");
+            return "index";
+        }
+
+        Usuario nuevo = new Usuario(usuario, password, false);
+        usuarioRepository.save(nuevo);
+
+        model.addAttribute("mensajeRegistro", "Se ha registrado correctamente");
+
+        return "index";
+    }
+
+    // AÑADIR AL CARRITO
+    @PostMapping("/add-carrito")
+    @ResponseBody
+    public String addCarrito(@RequestParam String nombre,
+                             @RequestParam double precio) {
+
+        boolean encontrado = false;
+
+        for (ItemPedido item : carrito) {
+            if (item.getNombre().equals(nombre)) {
+                item.setCantidad(item.getCantidad() + 1);
+                encontrado = true;
+            }
+        }
+
+        if (!encontrado) {
+            carrito.add(new ItemPedido(nombre, precio, 1));
+        }
+
+        System.out.println("Añadido: " + nombre);
+        System.out.println("Carrito size: " + carrito.size());
+
+        return "ok";
+    }
+
+    // ➕ SUMAR
+    @PostMapping("/sumar")
+    @ResponseBody
+    public String sumar(@RequestParam String nombre) {
+
+        for (ItemPedido item : carrito) {
+            if (item.getNombre().equals(nombre)) {
+                item.setCantidad(item.getCantidad() + 1);
+            }
+        }
+
+        return "ok";
+    }
+
+    // RESTAR
+    @PostMapping("/restar")
+    @ResponseBody
+    public String restar(@RequestParam String nombre) {
+
+        carrito.removeIf(item -> {
+            if (item.getNombre().equals(nombre)) {
+                item.setCantidad(item.getCantidad() - 1);
+                return item.getCantidad() <= 0;
+            }
+            return false;
+        });
+
+        return "ok";
+    }
+
+    // HACER PEDIDO
+    @PostMapping("/hacer-pedido")
+    public String hacerPedido(Model model) {
+
+        double total = calcularTotal();
+
+        Pedido pedido = new Pedido(usuarioActual, carrito, total);
+        pedidoRepository.save(pedido);
+
+        carrito = new ArrayList<>();
+
+        model.addAttribute("mensajePedido", "Pedido realizado correctamente");
+
+        cargarVistaUsuario(model);
+        return "panelUser";
+    }
+
+    // CARGAR VISTA USUARIO
+    private void cargarVistaUsuario(Model model) {
+
+        List<Producto> productos = productoRepository.findAll();
+
+        model.addAttribute("productos", productos);
+        model.addAttribute("carrito", carrito);
+        model.addAttribute("total", calcularTotal());
+        model.addAttribute("nombreUsuario", usuarioActual);
+    }
+
+    // CALCULAR TOTAL
+    private double calcularTotal() {
+
+        double total = 0;
+
+        for (ItemPedido item : carrito) {
+            total += item.getPrecio() * item.getCantidad();
+        }
+
+        return total;
+    }
 }

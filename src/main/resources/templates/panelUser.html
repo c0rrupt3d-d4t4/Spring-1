@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tienda</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+    <h1 class="mb-4">
+        Bienvenido <span th:text="${nombreUsuario}"></span>
+    </h1>
+
+    <div class="row">
+
+        <div class="col-md-4 mb-4" th:each="producto : ${productos}">
+
+            <div class="card h-100">
+
+                <img th:src="${producto.imagenUrl}"
+                     class="card-img-top"
+                     style="height:200px; object-fit:cover;">
+
+                <div class="card-body">
+
+                    <h5 class="card-title" th:text="${producto.nombre}"></h5>
+
+                    <p class="card-text">
+                        Precio: <span th:text="${producto.precio}"></span> €
+                    </p>
+					<button class="btn btn-primary w-100 btn-add"
+					        th:attr="data-nombre=${producto.nombre}, data-precio=${producto.precio}">
+					    Añadir
+					</button>
+                </div>
+				
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<hr>
+
+<h2>Carrito</h2>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        <tr th:each="item : ${carrito}">
+
+            <td th:text="${item.nombre}"></td>
+
+            <td th:text="${item.precio}"></td>
+
+            <td>
+				<button class="btn-restar"
+				        th:attr="data-nombre=${item.nombre}">-</button>
+
+				<span th:text="${item.cantidad}"></span>
+
+				<button class="btn-sumar"
+				        th:attr="data-nombre=${item.nombre}">+</button>
+            </td>
+
+            <td th:text="${#numbers.formatDecimal(item.precio * item.cantidad, 1, 2)}"></td>
+
+        </tr>
+
+    </tbody>
+
+</table>
+
+<h3>Total: 
+    <span th:text="${#numbers.formatDecimal(total, 1, 2)}"></span> €
+</h3>
+
+<form action="/hacer-pedido" method="post">
+    <button class="btn btn-success">Hacer pedido</button>
+</form>
+
+<p th:text="${mensajePedido}"></p>
+<script th:src="@{/js/carrito.js}"></script>
+</body>
+</html>
