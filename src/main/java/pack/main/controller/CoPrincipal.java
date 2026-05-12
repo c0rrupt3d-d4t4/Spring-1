@@ -46,12 +46,45 @@ public class CoPrincipal {
     }
     
   //Modificar producto
+    
     @GetMapping("/admin/modificarProducto")
-    public String modificarFormularioProducto() {
+    public String mostrarModificarProductos(Model model) {
+
+        model.addAttribute("productos", productoRepository.findAll());
+
         return "modificarProducto";
     }
-    
+    @PostMapping("/admin/modificar-producto")
+    public String modificarProducto(@RequestParam String id,
+                                    @RequestParam String nombre,
+                                    @RequestParam double precio,
+                                    @RequestParam String imagenUrl,
+                                    @RequestParam(required = false) String disponible) {
 
+        Producto producto = productoRepository.findById(id).orElse(null);
+
+        if (producto != null) {
+
+            producto.setNombre(nombre);
+            producto.setPrecio(precio);
+            producto.setImagenUrl(imagenUrl);
+
+            producto.setDisponible(disponible != null);
+
+            productoRepository.save(producto);
+        }
+
+        return "redirect:/admin/modificarProducto";
+    }
+    @PostMapping("/admin/eliminar-producto")
+    public String eliminarProducto(@RequestParam String id) {
+
+        productoRepository.deleteById(id);
+
+        return "redirect:/admin/modificarProducto";
+    }
+    
+    
     //Añadir producto
     @GetMapping("/admin/anadirProducto")
     public String mostrarFormularioProducto() {
