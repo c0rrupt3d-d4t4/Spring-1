@@ -1,4 +1,4 @@
-body{
+/*body{
 	display: flex;	
 	flex-direction: column;
 	background-color: beige;
@@ -31,4 +31,250 @@ form{
 	justify-content: center;
 	align-items: center;
 	gap: 18px;
+}
+
+
+*/
+
+@import url('https://fonts.cdnfonts.com/css/evogria?styles=15178');
+@import url('https://fonts.cdnfonts.com/css/roboto-condensed');
+
+:root {
+    --primary-color: rgba(255, 255, 255, 0.18);
+    --color-acent:   rgba(255, 255, 255, 0.28);
+    --text-white:    #ffffff;
+    --cubic:         cubic-bezier(0, .53, .11, .995);
+
+    --bg-dark:       rgba(0, 0, 0, 0.9);
+    --bg-panel:      rgba(0, 0, 0, 0.85);
+    --border-color:  rgba(255, 255, 255, 0.2);
+    --border-subtle: rgba(255, 255, 255, 0.1);
+
+    --font-title: 'Evogria', sans-serif;
+    --font-body: 'Roboto Condensed', sans-serif;
+    --font-body-light: 'Roboto Condensed Light', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    accent-color: rgba(255, 255, 255, 0.85);
+}
+
+body {
+    background-color: transparent;
+    color: var(--text-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+body, body * {
+    font-family: var(--font-body) !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-title) !important;
+    font-weight: 400;
+    letter-spacing: 0.2vh;
+    text-transform: uppercase;
+}
+
+
+.bg-wrapper {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+}
+
+.bg-gradient {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: #000000d9;
+}
+
+
+
+.bg-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.6) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(2vh); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-3vh); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
+.top-navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 0.1vh solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 5vh;
+    z-index: 20;
+    animation: slideDown 0.6s ease backwards;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 2vh;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.95);
+    font-family: var(--font-title) !important;
+    font-size: 2.5vh;
+    letter-spacing: 0.08vh;
+    text-transform: uppercase;
+}
+
+.navbar-brand img {
+    height: 5.5vh;
+    width: auto;
+    border: none;
+    background: transparent;
+}
+
+
+.panel {
+    background: rgba(0, 0, 0, 0.4);
+    border: 0.1vh solid rgba(255, 255, 255, 0.1);
+    border-radius: 1vh;
+    padding: 4.5vh 4vh;
+    outline: 0.1vh dashed rgba(255, 255, 255, 0.12);
+    outline-offset: 0.22vh;
+    width: 50vh;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5vh;
+    z-index: 10;
+    animation: fadeIn 0.6s ease 0.2s backwards;
+}
+
+
+.section-title {
+    font-size: 3vh;
+    font-family: var(--font-title);
+    color: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6vh;
+    font-weight: normal;
+    letter-spacing: 0.08vh;
+    text-transform: uppercase;
+    margin-bottom: 0.5vh;
+    text-align: center;
+}
+
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+
+input {
+    background: rgba(0, 0, 0, 0.5);
+    border: 0.1vh solid var(--border-subtle);
+    border-radius: 0.5vh;
+    color: white;
+    padding: 2vh;
+    font-family: var(--font-body);
+    font-size: 1.8vh;
+    outline: none;
+    transition: all 0.3s var(--cubic);
+    width: 100%;
+}
+
+input:focus {
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 1.5vh rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.4);
+}
+
+
+.buttons-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vh;
+    margin-top: 1.5vh;
+}
+
+.btn-primary {
+    background: rgba(255, 255, 255, 0.18);
+    border: 0.1vh solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+    border-radius: 0.7vh;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05vh;
+    transition: opacity 0.2s ease;
+    padding: 2vh;
+    font-family: var(--font-body);
+    font-size: 1.5vh;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.btn-success {
+    background: rgba(255, 255, 255, 0.25);
+    border: 0.1vh solid rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.95);
+    border-radius: 0.7vh;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05vh;
+    transition: opacity 0.2s ease;
+    padding: 2vh;
+    font-family: var(--font-body);
+    font-size: 1.5vh;
+    width: 100%;
+}
+
+.btn-success:hover {
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+
+.message {
+    font-size: 1.4vh;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: var(--font-body-light);
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 0.1vh solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5vh;
+    padding: 1.5vh;
+}
+
+.message:empty {
+    display: none;
 }

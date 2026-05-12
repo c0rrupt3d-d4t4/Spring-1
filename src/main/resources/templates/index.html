@@ -1,58 +1,47 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Prueba Spring Boot</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-	<link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mercado Eclipse - Login</title>
+    <link rel="stylesheet" href="../static/css/styles.css" th:href="@{/css/styles.css}" />
+  </head>
 
-<body>
-	<!-- Navbar con bootstrap-->
-	<nav class="navbar navbar-dark" style="background-color: #000">
-	  <a class="navbar-brand" href="">
-	    <img src="https://images.unsplash.com/photo-1529788295308-1eace6f67388?..." width="35" height="35" class="d-inline-block align-top" alt="">
-	    Mercado Eclipse
-	  </a>
-	</nav>
-	
-	<h1>Ejecutando Proyecto</h1>
-	<div id="div-start-session">
+  <body>
+    <nav class="top-navbar">
+      <a class="navbar-brand" href="">
+        <img
+          src="https://images.unsplash.com/photo-1529788295308-1eace6f67388"
+          alt="Logo Mercado Eclipse"
+        />
+        Mercado Eclipse
+      </a>
+    </nav>
+    
+    <div class="bg-wrapper">
+        <div class="bg-gradient"></div>
+    </div>
 
-	    <form>
+    <div class="panel">
+        <h1 class="section-title">Mercado Eclipse</h1>
+        
+        <form class="form-container">
+            <input name="usuario" id="usuario" type="text" placeholder="Usuario" />
+            <input name="password" id="password" type="password" placeholder="Contraseña" />
 
-	        <input name="usuario"
-	               id="usuario"
-	               type="text"
-	               placeholder="usuario">
+            <div class="buttons-row">
+                <button type="submit" class="btn-success" formaction="/inicio-sesion" formmethod="POST">
+                    Login
+                </button>
+                <button type="submit" class="btn-primary" formaction="/registro" formmethod="POST">
+                    Registrarse
+                </button>
+            </div>
+        </form>
 
-	        <input name="password"
-	               id="password"
-	               type="password"
-	               placeholder="contraseña">
-
-	        <button type="submit"
-	                formaction="/inicio-sesion"
-	                formmethod="POST">
-	            Login
-	        </button>
-
-	        <button type="submit"
-	                formaction="/registro"
-	                formmethod="POST">
-	            Registrarse
-	        </button>
-
-	    </form>
-
-	    <p th:if="${mensajeLogin != null}"
-	       th:text="${mensajeLogin}"></p>
-
-	    <p th:if="${mensajeRegistro != null}"
-	       th:text="${mensajeRegistro}"></p>
-
-	</div>
-    <hr>
-
-</body>
+        <p class="message" th:if="${mensajeLogin != null}" th:text="${mensajeLogin}"></p>
+        <p class="message" th:if="${mensajeRegistro != null}" th:text="${mensajeRegistro}"></p>
+    </div>
+  </body>
+  
 </html>
