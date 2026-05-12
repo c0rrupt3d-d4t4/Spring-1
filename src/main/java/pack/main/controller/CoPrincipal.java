@@ -44,6 +44,7 @@ public class CoPrincipal {
         return "index";
     }
 
+    //Añadir producto
     @GetMapping("/admin/anadirProducto")
     public String mostrarFormularioProducto() {
         return "anadirProducto";
