@@ -1,0 +1,29 @@
+body{
+	display: flex;	
+	flex-direction: column;
+	background-color: beige;
+}
+
+a{
+	margin:10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 2px solid black;
+}
+
+th {
+    background-color: #dcdcdc;
+    padding: 10px;
+    text-align: center;
+}
+
+td {
+    padding: 8px;
+    text-align: center;
+}
