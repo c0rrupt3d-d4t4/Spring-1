@@ -43,6 +43,13 @@ public class CoPrincipal {
     public String idx() {
         return "index";
     }
+    
+  //Modificar producto
+    @GetMapping("/admin/modificarProducto")
+    public String modificarFormularioProducto() {
+        return "modificarProducto";
+    }
+    
 
     //Añadir producto
     @GetMapping("/admin/anadirProducto")

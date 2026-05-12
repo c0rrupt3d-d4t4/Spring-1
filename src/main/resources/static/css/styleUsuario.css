@@ -3,3 +3,7 @@ body{
 	flex-direction: column;
 	background-color: beige;
 }
+
+a{
+	margin:10px;
+}
