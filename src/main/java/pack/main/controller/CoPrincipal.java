@@ -44,7 +44,32 @@ public class CoPrincipal {
         return "index";
     }
 
+    @GetMapping("/admin/anadirProducto")
+    public String mostrarFormularioProducto() {
+        return "anadirProducto";
+    }
+    @PostMapping("/admin/guardar-producto")
+    public String guardarProducto(@RequestParam String nombre,
+                                  @RequestParam double precio,
+                                  @RequestParam String imagenUrl,
+                                  @RequestParam(required = false) String disponible,
+                                  Model model) {
 
+        if (nombre.isEmpty() || imagenUrl.isEmpty()) {
+            model.addAttribute("mensaje", "Todos los campos son obligatorios");
+            return "anadirProducto";
+        }
+
+        boolean disponibleBool = (disponible != null);
+
+        Producto producto = new Producto(nombre, precio, imagenUrl, disponibleBool);
+
+        productoRepository.save(producto);
+
+        model.addAttribute("mensaje", "Producto añadido correctamente");
+
+        return "anadirProducto";
+    }
 
     // LOGIN
     @PostMapping("/inicio-sesion")
