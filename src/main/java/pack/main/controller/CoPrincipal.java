@@ -44,17 +44,7 @@ public class CoPrincipal {
         return "index";
     }
 
-    // BOTÓN PRUEBA
-    @PostMapping("/pulsarBoton")
-    public String procesarClic(Model model) {
 
-        Mensaje m = new Mensaje("Alguien pulsó el botón");
-        repositorio.save(m);
-
-        model.addAttribute("resultado", "Guardado en Mongo con ID: " + m.getId());
-
-        return "index";
-    }
 
     // LOGIN
     @PostMapping("/inicio-sesion")

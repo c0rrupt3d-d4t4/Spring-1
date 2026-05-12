@@ -42,13 +42,7 @@
 	       th:text="${mensajeRegistro}"></p>
 
 	</div>
-    <form th:action="@{/pulsarBoton}" method="POST">
-        <button type="submit">Púlsame</button>
-    </form>
-
     <hr>
-
-    <p th:if="${resultado != null}" th:text="${resultado}"></p>
 
 </body>
 </html>
