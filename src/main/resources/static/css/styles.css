@@ -1,0 +1,32 @@
+body{
+	display: flex;
+	flex-direction: column;
+	background-color: beige;
+	align-items:center;
+	margin:10px;
+	padding:10px;
+}
+#div-start-session{
+    display: flex;
+    flex-direction: column;
+	justify-content: center;
+	align-items: center;
+    gap: 18px;
+
+    width: auto;
+    margin: 50px auto;
+    padding: 28px;
+
+    background: #1f1f1f;
+    border-radius: 14px;
+    border: 1px solid #333;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    color: #f0f0f0;
+}
+form{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 18px;
+}

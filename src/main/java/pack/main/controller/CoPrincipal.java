@@ -34,7 +34,7 @@ public class CoPrincipal {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    // CARRITO (simple, global)
+    // 🛒 CARRITO (simple, global)
     private List<ItemPedido> carrito = new ArrayList<>();
     private String usuarioActual = "";
 
