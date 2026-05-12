@@ -5,9 +5,30 @@
     <meta charset="UTF-8">
     <title>Panel Admin</title>
 </head>
-
 <body>
 
+	<nav class="navbar navbar-dark" style="background-color: #000">
+		  <a class="navbar-brand" href="">
+		    <img src="https://images.unsplash.com/photo-1529788295308-1eace6f67388?..." width="35" height="35" class="d-inline-block align-top" alt="">
+		    Mercado Eclipse
+		  </a>
+		  <div class="collapse navbar-collapse" id="navbarNav">
+		  	<ul class="navbar-nav">
+		  		<li class="nav-item active">
+		  	    	<a class="nav-link" href="./index.html">Home <span class="sr-only">(current)</span></a>
+		  	    </li>
+		  	    <li class="nav-item">
+		  	    	<a class="nav-link" href="#">Features</a>
+		  	    </li>
+		  	    <li class="nav-item">
+		  	        <a class="nav-link" href="#">Pricing</a>
+		  	    </li>
+		  	    <li class="nav-item">
+		  	    	<a class="nav-link disabled" href="#">Disabled</a>
+		  	    </li>
+		 </div>
+	</nav>
+	  
     <h1>
         Te has logeado como ADMIN:
         <span th:text="${nombreUsuario}"></span>
