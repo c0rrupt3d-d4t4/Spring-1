@@ -5,13 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import pack.main.model.Mensaje;
 import pack.main.model.Usuario;
 import pack.main.model.Producto;
 import pack.main.model.ItemPedido;
 import pack.main.model.Pedido;
 
-import pack.main.repository.MensajeRepository;
 import pack.main.repository.UsuarioRepository;
 import pack.main.repository.ProductoRepository;
 import pack.main.repository.PedidoRepository;
@@ -21,9 +19,6 @@ import java.util.List;
 
 @Controller
 public class CoPrincipal {
-
-    @Autowired
-    private MensajeRepository repositorio;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
