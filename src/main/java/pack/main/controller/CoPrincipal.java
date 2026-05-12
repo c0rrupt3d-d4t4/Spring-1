@@ -29,14 +29,20 @@ public class CoPrincipal {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    // 🛒 CARRITO (simple, global)
-    private List<ItemPedido> carrito = new ArrayList<>();
+    // CARRITO (simple, global)
+    private ArrayList<ItemPedido> carrito = new ArrayList<>();
     private String usuarioActual = "";
 
     // INDEX
     @GetMapping(value = {"/index", "/", "/index.html"})
     public String idx() {
         return "index";
+    }
+    
+    //Listar pedido de usuario
+    @GetMapping(value={"/user/listadoPedidosUser","/user/listadoPedidosUser.html"})
+    public String listarPedidoUser() {
+        return "listadoPedidosUser";
     }
     
   //Modificar producto

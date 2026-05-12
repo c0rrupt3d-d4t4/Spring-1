@@ -12,16 +12,26 @@
 
 <body>
 
-<nav class="navbar navbar-dark" style="background-color: #000">
-	<a class="navbar-brand" href="">
-		<img src="https://images.unsplash.com/photo-1529788295308-1eace6f67388?..." width="35" height="35" class="d-inline-block align-top" alt="">
-		Mercado Eclipse
-	</a>
-			  
-	<a href="index.html" class="btn btn-danger">
-	  Cerrar Sesion
-	</a>
-</nav>
+	<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000;">
+			  <div class="container-fluid">
+			    <a class="navbar-brand d-flex align-items-center" href="#">
+			      <img src="https://images.unsplash.com/photo-1529788295308-1eace6f67388?..." width="35" height="35" class="d-inline-block align-top me-2" alt="Logo" style="border-radius: 5px;">
+			      <span>Mercado Eclicse</span>
+			    </a>
+
+			      <ul class="navbar-nav me-auto">
+			        <li class="nav-item">
+						<a class="nav-link" th:href="@{/user/listadoPedidosUser}">Mis Pedidos</a>
+					</li>
+			      </ul>
+			      <div class="d-flex">
+					<a href="./index.html" class="btn btn-outline-danger btn-sm">
+			          Cerrar Sesión
+			        </a>
+			      </div>
+			    </div>
+			  </div>
+			</nav>
 	
 <div class="container mt-4">
 
