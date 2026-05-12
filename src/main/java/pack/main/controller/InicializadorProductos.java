@@ -20,23 +20,23 @@ public class InicializadorProductos implements CommandLineRunner {
 
             productoRepository.save(new Producto(
                     "Manzana", 1.20,
-                    "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce"));
+                    "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce", true));
 
             productoRepository.save(new Producto(
                     "Pan", 0.80,
-                    "https://images.unsplash.com/photo-1608198093002-ad4e005484ec"));
+                    "https://images.unsplash.com/photo-1608198093002-ad4e005484ec", true));
 
             productoRepository.save(new Producto(
                     "Leche", 1.10,
-                    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b"));
+                    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b" , true));
 
             productoRepository.save(new Producto(
                     "Queso", 2.50,
-                    "https://images.unsplash.com/photo-1585238342024-78d387f4a707"));
+                    "https://images.unsplash.com/photo-1585238342024-78d387f4a707", true));
 
             productoRepository.save(new Producto(
                     "Huevos", 2.00,
-                    "https://images.unsplash.com/photo-1517959105821-eaf2591984ca"));
+                    "https://images.unsplash.com/photo-1517959105821-eaf2591984ca" , true));
 
             System.out.println("PRODUCTOS CREADOS");
         }
