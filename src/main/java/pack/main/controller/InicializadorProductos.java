@@ -28,15 +28,15 @@ public class InicializadorProductos implements CommandLineRunner {
 
             productoRepository.save(new Producto(
                     "Leche", 1.10,
-                    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b" , true));
+                    "https://img.freepik.com/vector-gratis/cajas-leche-realistas-aisladas_1284-35984.jpg?semt=ais_hybrid&w=740&q=80" , true));
 
             productoRepository.save(new Producto(
                     "Queso", 2.50,
-                    "https://images.unsplash.com/photo-1585238342024-78d387f4a707", true));
+                    "https://recetasdecocina.elmundo.es/wp-content/uploads/2025/05/queso-camembert.jpg", true));
 
             productoRepository.save(new Producto(
                     "Huevos", 2.00,
-                    "https://images.unsplash.com/photo-1517959105821-eaf2591984ca" , true));
+                    "https://gourmet.expob2b.es/uploads/fotos_noticias/2018/02/17206-137822-como-determinamos-la-frescura-y-calidad-de-los-huevos.jpg" , true));
 
             System.out.println("PRODUCTOS CREADOS");
         }
