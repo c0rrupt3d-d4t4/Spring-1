@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis pedidos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+	<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000;">
+		<div class="container-fluid">
+			<a class="navbar-brand d-flex align-items-center" href="../panelUser">
+				<img src="https://images.unsplash.com/photo-1529788295308-1eace6f67388?..." width="35" height="35" class="d-inline-block align-top me-2" alt="Logo" style="border-radius: 5px;">
+				<span>Mercado Eclicse</span>
+			</a>
+
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <!-- Corrección del enlace -->
+                    <a class="nav-link active" th:href="@{./listadoPedidosUser}">Mis Pedidos</a>
+                </li>
+            </ul>
+			<div class="d-flex">
+			<a href="./index.html" class="btn btn-outline-danger btn-sm">
+			    Cerrar Sesión
+			  </a>
+			</div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2>Historial de Mis Pedidos</h2>
+        
+		<table class="table table-bordered table-hover mt-3">
+		    <thead class="table-dark">
+		        <tr>
+		            <th>ID Pedido</th>
+		            <th>Producto</th>
+		            <th class="text-center">Precio Unitario</th>
+		            <th class="text-center">Cantidad</th>
+		            <th class="text-end">Total Pedido</th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <!-- Recorremos cada pedido -->
+		        <tr th:each="pedido : ${pedidos}">
+		            <td th:text="${pedido.id}" class="align-middle">ID</td>
+		            
+		            <!-- Columna de Nombres -->
+		            <td class="p-0">
+		                <table class="table table-borderless mb-0">
+		                    <tr th:each="item : ${pedido.items}">
+		                        <td th:text="${item.nombre}">Producto</td>
+		                    </tr>
+		                </table>
+		            </td>
+
+		            <!-- Columna de Precios Unitarios -->
+		            <td class="p-0 text-center">
+		                <table class="table table-borderless mb-0">
+		                    <tr th:each="item : ${pedido.items}">
+		                        <td th:text="${item.precio + '€'}">0.00€</td>
+		                    </tr>
+		                </table>
+		            </td>
+
+		            <!-- Columna de Cantidades -->
+		            <td class="p-0 text-center">
+		                <table class="table table-borderless mb-0">
+		                    <tr th:each="item : ${pedido.items}">
+		                        <td th:text="${item.cantidad}">1</td>
+		                    </tr>
+		                </table>
+		            </td>
+
+		            <!-- Total final del pedido -->
+		            <td th:text="${pedido.total + '€'}" class="text-end align-middle fw-bold">0.00€</td>
+		        </tr>
+		        
+		        <tr th:if="${#lists.isEmpty(pedidos)}">
+		            <td colspan="5" class="text-center">No se han encontrado pedidos en tu historial.</td>
+		        </tr>
+		    </tbody>
+		</table>
+    </div>
+
+</body>
+</html>
