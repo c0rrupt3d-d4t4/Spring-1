@@ -10,29 +10,33 @@
 
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000;">
-		  <div class="container-fluid">
-		    <a class="navbar-brand d-flex align-items-center" href="#">
-		      <img src="https://images.unsplash.com/photo-1529788295308-1eace6f67388?..." width="35" height="35" class="d-inline-block align-top me-2" alt="Logo" style="border-radius: 5px;">
-		      <span>Mercado Eclicse</span>
-		    </a>
+	    <div class="container-fluid">
+	        <a class="navbar-brand d-flex align-items-center" href="#">
+	            <img src="https://images.unsplash.com/photo-1529788295308-1eace6f67388?..." width="35" height="35" class="d-inline-block align-top me-2" alt="Logo" style="border-radius: 5px;">
+	            <span>Mercado Eclicse</span>
+	        </a>
+			<ul class="navbar-nav me-auto">
 
-		      <ul class="navbar-nav me-auto">
-		        <li class="nav-item">
-					<a class="nav-link" th:href="@{/admin/panel}">Volver al Panel</a>
-				</li>
-		        <li class="nav-item">
-		          <a class="nav-link" href="./modificarProducto">Modificar Producto</a>
-		        </li>
-		      </ul>
+			    <li class="nav-item">
+			        <a class="nav-link" th:href="@{./listadoPedidosTotales}">Ver Pedidos Clientes</a>
+			    </li>
 
-		      <div class="d-flex">
-				<a href="../index.html" class="btn btn-outline-danger btn-sm">
-		          Cerrar Sesión
-		        </a>
-		      </div>
-		    </div>
-		  </div>
-		</nav>
+	            <li class="nav-item">
+	                <a class="nav-link active" href="./anadirProducto">Añadir Productos</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="./modificarProducto">Modificar Producto</a>
+	            </li>
+				</ul>
+
+
+	        <div class="d-flex">
+	            <a href="../index.html" class="btn btn-outline-danger btn-sm">
+	                Cerrar Sesión
+	            </a>
+	        </div>
+	    </div>
+	</nav>
 
 <div class="container mt-5">
 

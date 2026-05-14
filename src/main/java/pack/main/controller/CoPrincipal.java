@@ -86,19 +86,22 @@ public class CoPrincipal {
 		session.setAttribute("usuarioLogueado", usuarioEncontrado.getNombreUsuario());
 
 		if (usuarioEncontrado.isAdmin()) {
-			return "panelAdmin";
-		}
+			listarTodosLosPedidos(model, session);
+			return "redirect:/admin/listadoPedidosTotales";
+			}
 
 		cargarVistaUsuario(model, session);
 		return "panelUser";
 	}
+	@GetMapping("/admin/listadoPedidosTotales")
+	public String listarTodosLosPedidos(Model model, HttpSession session) {
 
-	// LOGOUT (Para poder salir)
-	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
-		return "redirect:/index";
+	    List<Pedido> todosLosPedidos = pedidoRepository.findAll();
+	    model.addAttribute("pedidos", todosLosPedidos);
+	    
+	    return "panelAdmin"; // Nombre del nuevo HTML
 	}
+
 
 	// HACER PEDIDO
 	@PostMapping("/hacer-pedido")

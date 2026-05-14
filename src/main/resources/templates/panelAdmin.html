@@ -1,40 +1,81 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <meta charset="UTF-8">
-    <title>Panel Admin</title>
-	
+    <title>Gestión de Pedidos - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
-	<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000;">
-	  <div class="container-fluid">
-	    <a class="navbar-brand d-flex align-items-center" href="#">
-	      <img src="https://images.unsplash.com/photo-1529788295308-1eace6f67388?..." width="35" height="35" class="d-inline-block align-top me-2" alt="Logo" style="border-radius: 5px;">
-	      <span>Mercado Eclicse</span>
-	    </a>
+    <!-- Navbar de Administrador Integrado -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000;">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="https://images.unsplash.com/photo-1529788295308-1eace6f67388?..." width="35" height="35" class="d-inline-block align-top me-2" alt="Logo" style="border-radius: 5px;">
+                <span>Mercado Eclicse</span>
+            </a>
+			<ul class="navbar-nav me-auto">
 
-	      <ul class="navbar-nav me-auto">
-	        <li class="nav-item">
-	          <a class="nav-link" href="./admin/anadirProducto">Añadir Productos</a>
-	        </li>
-	        <li class="nav-item">
-	          <a class="nav-link" href="./admin/modificarProducto">Modificar Producto</a>
-	        </li>
-	      </ul>
+			    <li class="nav-item">
+			        <a class="nav-link active" th:href="@{.	/listadoPedidosTotales}">Ver Pedidos Clientes</a>
+			    </li>
 
-	      <div class="d-flex">
-	        <a href="./index.html" class="btn btn-outline-danger btn-sm">
-	          Cerrar Sesión
-	        </a>
-	      </div>
-	    </div>
-	  </div>
-	</nav>
- 
+                <li class="nav-item">
+                    <a class="nav-link" href="./anadirProducto">Añadir Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./modificarProducto">Modificar Producto</a>
+                </li>
+				</ul>
+
+
+            <div class="d-flex">
+                <a href="../index.html" class="btn btn-outline-danger btn-sm">
+                    Cerrar Sesión
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Historial Global de Pedidos</h2>
+            <span class="badge bg-primary">Modo Administrador</span>
+        </div>
+        
+        <table class="table table-bordered table-hover mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Usuario</th>
+                    <th>ID Pedido</th>
+                    <th>Productos (Cant.)</th>
+                    <th>Total Facturado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Recorremos todos los pedidos de la base de datos -->
+                <tr th:each="pedido : ${pedidos}">
+                    <td class="fw-bold align-middle" th:text="${pedido.nombreUsuario}">Usuario</td>
+                    <td class="align-middle text-muted" th:text="${pedido.id}">ID</td>
+                    <td>
+                        <ul class="list-unstyled mb-0">
+                            <!-- Recorremos los items de cada pedido individual -->
+                            <li th:each="item : ${pedido.items}">
+                                <i class="bi bi-dot"></i>
+                                <span th:text="${item.nombre + ' (x' + item.cantidad + ')'}"></span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td class="align-middle fw-bold text-success" th:text="${pedido.total + '€'}">0.00€</td>
+                </tr>
+                
+                <!-- Si la base de datos de pedidos está vacía -->
+                <tr th:if="${#lists.isEmpty(pedidos)}">
+                    <td colspan="4" class="text-center py-4">No hay pedidos registrados en el sistema.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
 </body>
 </html>
