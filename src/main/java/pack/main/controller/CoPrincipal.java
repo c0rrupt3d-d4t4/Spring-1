@@ -39,42 +39,40 @@ public class CoPrincipal {
 	public String idx() {
 		return "index";
 	}
+
 	@GetMapping("/admin/permisos")
 	public String permisosUsuarios(Model model, HttpSession session) {
 
-	    String usuarioActivo = (String) session.getAttribute("usuarioLogueado");
+		String usuarioActivo = (String) session.getAttribute("usuarioLogueado");
 
-	    if (usuarioActivo == null) {
-	        return "redirect:/index";
-	    }
+		if (usuarioActivo == null) {
+			return "redirect:/index";
+		}
 
-	    // Traemos todos los usuarios
-	    List<Usuario> usuarios = usuarioRepository.findAll();
+		// Traemos todos los usuarios
+		List<Usuario> usuarios = usuarioRepository.findAll();
 
-	    // Filtramos: quitar "admin" y el usuario actual
-	    usuarios.removeIf(u -> 
-	        u.getNombreUsuario().equals("admin") ||
-	        u.getNombreUsuario().equals(usuarioActivo)
-	    );
+		// Filtramos: quitar "admin" y el usuario actual
+		usuarios.removeIf(u -> u.getNombreUsuario().equals("admin") || u.getNombreUsuario().equals(usuarioActivo));
 
-	    model.addAttribute("usuarios", usuarios);
-	    model.addAttribute("usuarioActivo", usuarioActivo);
+		model.addAttribute("usuarios", usuarios);
+		model.addAttribute("usuarioActivo", usuarioActivo);
 
-	    return "permisosAdminUser";
+		return "permisosAdminUser";
 	}
-	
+
 	@PostMapping("/admin/toggle-admin")
 	@ResponseBody
 	public String cambiarAdmin(@RequestParam String nombre) {
 
-	    Usuario usuario = usuarioRepository.findByNombreUsuario(nombre);
+		Usuario usuario = usuarioRepository.findByNombreUsuario(nombre);
 
-	    if (usuario != null) {
-	        usuario.setAdmin(!usuario.isAdmin());
-	        usuarioRepository.save(usuario);
-	    }
+		if (usuario != null) {
+			usuario.setAdmin(!usuario.isAdmin());
+			usuarioRepository.save(usuario);
+		}
 
-	    return "ok";
+		return "ok";
 	}
 
 	// PANEL DE USUARIO (Verifica sesión)
@@ -161,6 +159,30 @@ public class CoPrincipal {
 		return "redirect:/panelUser";
 	}
 
+	// REGISTRO
+	@PostMapping("/registro")
+	public String registro(@RequestParam String usuario, @RequestParam String password, Model model) {
+
+		if (usuario.isEmpty() || password.isEmpty()) {
+			model.addAttribute("mensajeRegistro", "Está vacío el usuario o contraseña");
+			return "index";
+		}
+
+		Usuario existe = usuarioRepository.findByNombreUsuario(usuario);
+
+		if (existe != null) {
+			model.addAttribute("mensajeRegistro", "Ese usuario ya existe");
+			return "index";
+		}
+
+		Usuario nuevo = new Usuario(usuario, password, false);
+		usuarioRepository.save(nuevo);
+
+		model.addAttribute("mensajeRegistro", "Se ha registrado correctamente");
+
+		return "index";
+	}
+
 	// --- MÉTODOS DE APOYO ---
 
 	private void cargarVistaUsuario(Model model, HttpSession session) {
@@ -220,12 +242,15 @@ public class CoPrincipal {
 		return "ok";
 	}
 
+
+
 	// ADMINISTRACIÓN (Simplificados para brevedad)
 	@GetMapping("/admin/modificarProducto")
 	public String mostrarModificarProductos(Model model) {
 		model.addAttribute("productos", productoRepository.findAll());
 		return "modificarProducto";
 	}
+
 	@PostMapping("/admin/modificar-producto")
 	public String modificarProducto(@RequestParam String id, @RequestParam String nombre, @RequestParam double precio,
 			@RequestParam String imagenUrl, @RequestParam(required = false) String disponible) {
