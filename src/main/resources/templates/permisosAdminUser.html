@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Permisos Usuarios</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000;">
+    <div class="container-fluid">
+
+        <a class="navbar-brand d-flex align-items-center" href="">
+            <img src="https://images.unsplash.com/photo-1529788295308-1eace6f67388?..." width="35" height="35" class="me-2" style="border-radius: 5px;">
+            <span>Mercado Eclicse</span>
+        </a>
+
+        <ul class="navbar-nav me-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/listadoPedidosTotales}">
+                    Ver Pedidos Clientes
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/anadirProducto}">
+                    Añadir Productos
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/admin/modificarProducto}">
+                    Modificar Producto
+                </a>
+            </li>
+
+            <!-- NUEVO -->
+            <li class="nav-item">
+                <a class="nav-link active" th:href="@{/admin/permisos}">
+                    Permisos Usuarios
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="d-flex">
+            <a href="/index" class="btn btn-outline-danger btn-sm">
+                Cerrar Sesión
+            </a>
+        </div>
+
+    </div>
+</nav>
+
+<div class="container mt-5">
+
+    <h2>Gestión de permisos</h2>
+
+    <table class="table table-bordered mt-4">
+
+        <thead class="table-dark">
+            <tr>
+                <th>Usuario</th>
+                <th>Admin</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr th:each="u : ${usuarios}">
+
+                <td th:text="${u.nombreUsuario}"></td>
+
+                <td>
+                    <div class="form-check form-switch">
+
+                        <input class="form-check-input toggle-admin"
+                               type="checkbox"
+                               th:attr="data-nombre=${u.nombreUsuario}"
+                               th:checked="${u.admin}">
+                    </div>
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<script th:src="@{/js/permisos.js}"></script>
+
+</body>
+</html>

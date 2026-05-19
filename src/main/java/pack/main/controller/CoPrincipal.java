@@ -39,6 +39,43 @@ public class CoPrincipal {
 	public String idx() {
 		return "index";
 	}
+	@GetMapping("/admin/permisos")
+	public String permisosUsuarios(Model model, HttpSession session) {
+
+	    String usuarioActivo = (String) session.getAttribute("usuarioLogueado");
+
+	    if (usuarioActivo == null) {
+	        return "redirect:/index";
+	    }
+
+	    // Traemos todos los usuarios
+	    List<Usuario> usuarios = usuarioRepository.findAll();
+
+	    // Filtramos: quitar "admin" y el usuario actual
+	    usuarios.removeIf(u -> 
+	        u.getNombreUsuario().equals("admin") ||
+	        u.getNombreUsuario().equals(usuarioActivo)
+	    );
+
+	    model.addAttribute("usuarios", usuarios);
+	    model.addAttribute("usuarioActivo", usuarioActivo);
+
+	    return "permisosAdminUser";
+	}
+	
+	@PostMapping("/admin/toggle-admin")
+	@ResponseBody
+	public String cambiarAdmin(@RequestParam String nombre) {
+
+	    Usuario usuario = usuarioRepository.findByNombreUsuario(nombre);
+
+	    if (usuario != null) {
+	        usuario.setAdmin(!usuario.isAdmin());
+	        usuarioRepository.save(usuario);
+	    }
+
+	    return "ok";
+	}
 
 	// PANEL DE USUARIO (Verifica sesión)
 	@GetMapping("/panelUser")
