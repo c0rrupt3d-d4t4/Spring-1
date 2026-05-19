@@ -158,7 +158,7 @@ public class CoPrincipal {
 		model.addAttribute("mensajePedido", "Pedido realizado correctamente");
 
 		cargarVistaUsuario(model, session);
-		return "panelUser";
+		return "redirect:/panelUser";
 	}
 
 	// --- MÉTODOS DE APOYO ---
