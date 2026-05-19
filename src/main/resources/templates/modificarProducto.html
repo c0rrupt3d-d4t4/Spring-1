@@ -59,86 +59,42 @@
 
 		    <tbody>
 
-		        <tr th:each="producto : ${productos}">
+				<tr th:each="producto : ${productos}">
+				    <!-- FORMULARIO MODIFICAR -->
+				    <!-- Usamos th:action para asegurar que la ruta sea correcta desde cualquier nivel -->
+				    <form th:action="@{/admin/modificar-producto}" method="post">
+				        <input type="hidden" name="id" th:value="${producto.id}">
 
-		            <!-- FORMULARIO MODIFICAR -->
-		            <form action="/admin/modificar-producto" method="post">
+				        <td>
+				            <input type="text" name="nombre" th:value="${producto.nombre}" class="form-control">
+				        </td>
 
-		                <!-- ID OCULTO -->
-		                <input type="hidden"
-		                       name="id"
-		                       th:value="${producto.id}">
+				        <td>
+				            <input type="number" step="0.01" name="precio" th:value="${producto.precio}" class="form-control">
+				        </td>
 
-		                <!-- NOMBRE -->
-		                <td>
+				        <td>
+				            <input type="text" name="imagenUrl" th:value="${producto.imagenUrl}" class="form-control">
+				        </td>
 
-		                    <input type="text"
-		                           name="nombre"
-		                           th:value="${producto.nombre}"
-		                           class="form-control">
+				        <td class="text-center">
+				            <!-- El nombre 'disponible' debe coincidir con el @RequestParam del controlador -->
+				            <input type="checkbox" name="disponible" th:checked="${producto.disponible}">
+				        </td>
 
-		                </td>
+				        <td>
+				            <button type="submit" class="btn btn-warning">Modificar</button>
+				        </td>
+				    </form>
 
-		                <!-- PRECIO -->
-		                <td>
-
-		                    <input type="number"
-		                           step="0.01"
-		                           name="precio"
-		                           th:value="${producto.precio}"
-		                           class="form-control">
-
-		                </td>
-
-		                <!-- URL -->
-		                <td>
-
-		                    <input type="text"
-		                           name="imagenUrl"
-		                           th:value="${producto.imagenUrl}"
-		                           class="form-control">
-
-		                </td>
-
-		                <!-- DISPONIBLE -->
-		                <td class="text-center">
-
-		                    <input type="checkbox"
-		                           name="disponible"
-		                           th:checked="${producto.disponible}">
-
-		                </td>
-
-		                <!-- BOTÓN EDITAR -->
-		                <td>
-
-		                    <button class="btn btn-warning">
-		                        Modificar
-		                    </button>
-
-		                </td>
-
-		            </form>
-
-		            <!-- FORMULARIO ELIMINAR -->
-		            <td>
-
-		                <form action="/admin/eliminar-producto" method="post">
-
-		                    <input type="hidden"
-		                           name="id"
-		                           th:value="${producto.id}">
-
-		                    <button class="btn btn-danger">
-		                        Eliminar
-		                    </button>
-
-		                </form>
-
-		            </td>
-
-		        </tr>
-
+				    <!-- FORMULARIO ELIMINAR -->
+				    <td>
+				        <form th:action="@{/admin/eliminar-producto}" method="post">
+				            <input type="hidden" name="id" th:value="${producto.id}">
+				            <button type="submit" class="btn btn-danger">Eliminar</button>
+				        </form>
+				    </td>
+				</tr>
 		    </tbody>
 
 		</table>

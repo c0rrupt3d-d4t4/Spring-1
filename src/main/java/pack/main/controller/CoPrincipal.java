@@ -88,20 +88,20 @@ public class CoPrincipal {
 		if (usuarioEncontrado.isAdmin()) {
 			listarTodosLosPedidos(model, session);
 			return "redirect:/admin/listadoPedidosTotales";
-			}
+		}
 
 		cargarVistaUsuario(model, session);
 		return "panelUser";
 	}
+
 	@GetMapping("/admin/listadoPedidosTotales")
 	public String listarTodosLosPedidos(Model model, HttpSession session) {
 
-	    List<Pedido> todosLosPedidos = pedidoRepository.findAll();
-	    model.addAttribute("pedidos", todosLosPedidos);
-	    
-	    return "panelAdmin"; // Nombre del nuevo HTML
-	}
+		List<Pedido> todosLosPedidos = pedidoRepository.findAll();
+		model.addAttribute("pedidos", todosLosPedidos);
 
+		return "panelAdmin"; // Nombre del nuevo HTML
+	}
 
 	// HACER PEDIDO
 	@PostMapping("/hacer-pedido")
@@ -188,6 +188,32 @@ public class CoPrincipal {
 	public String mostrarModificarProductos(Model model) {
 		model.addAttribute("productos", productoRepository.findAll());
 		return "modificarProducto";
+	}
+
+	@PostMapping("/admin/modificar-producto")
+	public String modificarProducto(@RequestParam String id, @RequestParam String nombre, @RequestParam double precio,
+			@RequestParam String imagenUrl, @RequestParam(required = false) String disponible) {
+
+		Producto producto = productoRepository.findById(id).orElse(null);
+
+		if (producto != null) {
+			producto.setNombre(nombre);
+			producto.setPrecio(precio);
+			producto.setImagenUrl(imagenUrl);
+			// Si el checkbox no se marca, llega como null
+			producto.setDisponible(disponible != null);
+
+			productoRepository.save(producto);
+		}
+
+		// Redirige de nuevo a la lista para ver los cambios
+		return "redirect:/admin/modificarProducto";
+	}
+
+	@PostMapping("/admin/eliminar-producto")
+	public String eliminarProducto(@RequestParam String id) {
+		productoRepository.deleteById(id);
+		return "redirect:/admin/modificarProducto";
 	}
 
 	@GetMapping("/admin/anadirProducto")
