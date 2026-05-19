@@ -189,7 +189,7 @@ public class CoPrincipal {
 		model.addAttribute("productos", productoRepository.findAll());
 		return "modificarProducto";
 	}
-
+	// url modificar producto
 	@PostMapping("/admin/modificar-producto")
 	public String modificarProducto(@RequestParam String id, @RequestParam String nombre, @RequestParam double precio,
 			@RequestParam String imagenUrl, @RequestParam(required = false) String disponible) {
