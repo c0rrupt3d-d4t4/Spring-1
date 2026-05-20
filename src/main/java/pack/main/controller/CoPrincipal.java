@@ -15,8 +15,10 @@ import pack.main.repository.UsuarioRepository;
 import pack.main.repository.ProductoRepository;
 import pack.main.repository.PedidoRepository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class CoPrincipal {
@@ -121,7 +123,7 @@ public class CoPrincipal {
 		session.setAttribute("usuarioLogueado", usuarioEncontrado.getNombreUsuario());
 
 		if (usuarioEncontrado.isAdmin()) {
-			listarTodosLosPedidos(model, session);
+			listarTodosLosPedidos(usuario, model, session);
 			return "redirect:/admin/listadoPedidosTotales";
 		}
 
@@ -129,16 +131,37 @@ public class CoPrincipal {
 		return "panelUser";
 	}
 
+	// LISTADO DE PEDIDOS DEL ADMINISTRADOR CON FILTRO DE BÚSQUEDA
 	@GetMapping("/admin/listadoPedidosTotales")
-	public String listarTodosLosPedidos(Model model, HttpSession session) {
+	public String listarTodosLosPedidos(@RequestParam(name = "textoBusqueda", required = false) String textoBusqueda,
+			Model model, HttpSession session) {
 
 		List<Pedido> todosLosPedidos = pedidoRepository.findAll();
+
+		if (textoBusqueda != null && !textoBusqueda.trim().isEmpty()) {
+			final String textoALower = textoBusqueda.toLowerCase().trim();
+
+			todosLosPedidos = todosLosPedidos.stream()
+					.filter(pedido -> String.valueOf(pedido.getId()).contains(textoALower) ||
+
+							(pedido.getNombreUsuario() != null
+									&& pedido.getNombreUsuario().toLowerCase().contains(textoALower))
+							||
+
+							pedido.getItems().stream()
+									.anyMatch(item -> item.getNombre() != null
+											&& item.getNombre().toLowerCase().contains(textoALower)))
+					.collect(Collectors.toList());
+		}
+
 		model.addAttribute("pedidos", todosLosPedidos);
 
-		return "panelAdmin"; // Nombre del nuevo HTML
-	}
+		model.addAttribute("textoBusqueda", textoBusqueda);
 
+		return "panelAdmin";
+	}
 	// HACER PEDIDO
+
 	@PostMapping("/hacer-pedido")
 	public String hacerPedido(Model model, HttpSession session) {
 		String nombre = (String) session.getAttribute("usuarioLogueado");
@@ -147,8 +170,9 @@ public class CoPrincipal {
 			return "redirect:/index";
 
 		double total = calcularTotal();
-
-		Pedido pedido = new Pedido(nombre, new ArrayList<>(carrito), total);
+		LocalDate fecha = LocalDate.now();
+				
+		Pedido pedido = new Pedido(nombre, new ArrayList<>(carrito), total, fecha);
 		pedidoRepository.save(pedido);
 
 		carrito.clear(); // Limpiamos el carrito
@@ -242,8 +266,6 @@ public class CoPrincipal {
 		return "ok";
 	}
 
-
-
 	// ADMINISTRACIÓN (Simplificados para brevedad)
 	@GetMapping("/admin/modificarProducto")
 	public String mostrarModificarProductos(Model model) {
@@ -278,7 +300,7 @@ public class CoPrincipal {
 	}
 
 	@GetMapping("/admin/anadirProducto")
-	public String mostrarFormularioProducto() {
+	public String mostrarFormularioProducto() {	    
 		return "anadirProducto";
 	}
 }
