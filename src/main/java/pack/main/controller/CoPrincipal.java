@@ -32,8 +32,6 @@ public class CoPrincipal {
 	@Autowired
 	private PedidoRepository pedidoRepository;
 
-	// El carrito sigue siendo global (se comparte entre todos, ¡ojo con esto más
-	// adelante!)
 	private ArrayList<ItemPedido> carrito = new ArrayList<>();
 
 	// INDEX
@@ -42,44 +40,10 @@ public class CoPrincipal {
 		return "index";
 	}
 
-	@GetMapping("/admin/permisos")
-	public String permisosUsuarios(Model model, HttpSession session) {
-
-		String usuarioActivo = (String) session.getAttribute("usuarioLogueado");
-
-		if (usuarioActivo == null) {
-			return "redirect:/index";
-		}
-
-		// Traemos todos los usuarios
-		List<Usuario> usuarios = usuarioRepository.findAll();
-
-		// Filtramos: quitar "admin" y el usuario actual
-		usuarios.removeIf(u -> u.getNombreUsuario().equals("admin") || u.getNombreUsuario().equals(usuarioActivo));
-
-		model.addAttribute("usuarios", usuarios);
-		model.addAttribute("usuarioActivo", usuarioActivo);
-
-		return "permisosAdminUser";
-	}
-
-	@PostMapping("/admin/toggle-admin")
-	@ResponseBody
-	public String cambiarAdmin(@RequestParam String nombre) {
-
-		Usuario usuario = usuarioRepository.findByNombreUsuario(nombre);
-
-		if (usuario != null) {
-			usuario.setAdmin(!usuario.isAdmin());
-			usuarioRepository.save(usuario);
-		}
-
-		return "ok";
-	}
-
 	// PANEL DE USUARIO (Verifica sesión)
 	@GetMapping("/panelUser")
 	public String volverAlPanel(Model model, HttpSession session) {
+		// Guardamos temporalmente el usuario logeado para volver al index
 		String nombre = (String) session.getAttribute("usuarioLogueado");
 
 		if (nombre == null) {
@@ -131,35 +95,6 @@ public class CoPrincipal {
 		return "panelUser";
 	}
 
-	// LISTADO DE PEDIDOS DEL ADMINISTRADOR CON FILTRO DE BÚSQUEDA
-	@GetMapping("/admin/listadoPedidosTotales")
-	public String listarTodosLosPedidos(@RequestParam(name = "textoBusqueda", required = false) String textoBusqueda,
-			Model model, HttpSession session) {
-
-		List<Pedido> todosLosPedidos = pedidoRepository.findAll();
-
-		if (textoBusqueda != null && !textoBusqueda.trim().isEmpty()) {
-			final String textoALower = textoBusqueda.toLowerCase().trim();
-
-			todosLosPedidos = todosLosPedidos.stream()
-					.filter(pedido -> String.valueOf(pedido.getId()).contains(textoALower) ||
-
-							(pedido.getNombreUsuario() != null
-									&& pedido.getNombreUsuario().toLowerCase().contains(textoALower))
-							||
-
-							pedido.getItems().stream()
-									.anyMatch(item -> item.getNombre() != null
-											&& item.getNombre().toLowerCase().contains(textoALower)))
-					.collect(Collectors.toList());
-		}
-
-		model.addAttribute("pedidos", todosLosPedidos);
-
-		model.addAttribute("textoBusqueda", textoBusqueda);
-
-		return "panelAdmin";
-	}
 	// HACER PEDIDO
 
 	@PostMapping("/hacer-pedido")
@@ -267,6 +202,36 @@ public class CoPrincipal {
 	}
 
 	// ADMINISTRACIÓN (Simplificados para brevedad)
+	
+	// LISTADO DE PEDIDOS DEL ADMINISTRADOR CON FILTRO DE BÚSQUEDA
+	@GetMapping("/admin/listadoPedidosTotales")
+	public String listarTodosLosPedidos(@RequestParam(name = "textoBusqueda", required = false) String textoBusqueda,
+			Model model, HttpSession session) {
+
+		List<Pedido> todosLosPedidos = pedidoRepository.findAll();
+
+		if (textoBusqueda != null && !textoBusqueda.trim().isEmpty()) {
+			final String textoALower = textoBusqueda.toLowerCase().trim();
+
+			todosLosPedidos = todosLosPedidos.stream()
+					.filter(pedido -> String.valueOf(pedido.getId()).contains(textoALower) ||
+
+							(pedido.getNombreUsuario() != null
+									&& pedido.getNombreUsuario().toLowerCase().contains(textoALower))
+							||
+
+							pedido.getItems().stream()
+									.anyMatch(item -> item.getNombre() != null
+											&& item.getNombre().toLowerCase().contains(textoALower)))
+					.collect(Collectors.toList());
+		}
+
+		model.addAttribute("pedidos", todosLosPedidos);
+
+		model.addAttribute("textoBusqueda", textoBusqueda);
+
+		return "panelAdmin";
+	}
 	@GetMapping("/admin/modificarProducto")
 	public String mostrarModificarProductos(Model model) {
 		model.addAttribute("productos", productoRepository.findAll());
@@ -302,5 +267,40 @@ public class CoPrincipal {
 	@GetMapping("/admin/anadirProducto")
 	public String mostrarFormularioProducto() {	    
 		return "anadirProducto";
+	}
+	
+	@GetMapping("/admin/permisos")
+	public String permisosUsuarios(Model model, HttpSession session) {
+
+		String usuarioActivo = (String) session.getAttribute("usuarioLogueado");
+
+		if (usuarioActivo == null) {
+			return "redirect:/index";
+		}
+
+		// Traemos todos los usuarios
+		List<Usuario> usuarios = usuarioRepository.findAll();
+
+		// Filtramos: quitar "admin" y el usuario actual
+		usuarios.removeIf(u -> u.getNombreUsuario().equals("admin") || u.getNombreUsuario().equals(usuarioActivo));
+
+		model.addAttribute("usuarios", usuarios);
+		model.addAttribute("usuarioActivo", usuarioActivo);
+
+		return "permisosAdminUser";
+	}
+
+	@PostMapping("/admin/toggle-admin")
+	@ResponseBody
+	public String cambiarAdmin(@RequestParam String nombre) {
+
+		Usuario usuario = usuarioRepository.findByNombreUsuario(nombre);
+
+		if (usuario != null) {
+			usuario.setAdmin(!usuario.isAdmin());
+			usuarioRepository.save(usuario);
+		}
+
+		return "ok";
 	}
 }

@@ -14,9 +14,8 @@ public class InicializadorUsuarios implements CommandLineRunner {
 	private UsuarioRepository usuarioRepository;
 
 	@Override
-	public void run(String... args) throws Exception {
-		// CREAR USUARIOS INICIALES
-		System.out.println("INICIALIZADOR EJECUTADO");
+	public void run(String[] args) throws Exception {
+		// Crea los usuarios iniciales, uno básico y otro administrador en caso de que no existan
 
 		if (usuarioRepository.findByNombreUsuario("admin") == null) {
 
@@ -24,7 +23,6 @@ public class InicializadorUsuarios implements CommandLineRunner {
 
 			usuarioRepository.save(admin);
 
-			System.out.println("ADMIN CREADO");
 		}
 
 		if (usuarioRepository.findByNombreUsuario("usuario") == null) {
@@ -33,7 +31,6 @@ public class InicializadorUsuarios implements CommandLineRunner {
 
 			usuarioRepository.save(usuario);
 
-			System.out.println("USUARIO CREADO");
 		}
 	}
 }
