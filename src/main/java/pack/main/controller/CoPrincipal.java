@@ -15,7 +15,7 @@ import pack.main.repository.UsuarioRepository;
 import pack.main.repository.ProductoRepository;
 import pack.main.repository.PedidoRepository;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -105,7 +105,7 @@ public class CoPrincipal {
 			return "redirect:/index";
 
 		double total = calcularTotal();
-		LocalDate fecha = LocalDate.now();
+		LocalDateTime fecha = LocalDateTime.now();
 				
 		Pedido pedido = new Pedido(nombre, new ArrayList<>(carrito), total, fecha);
 		pedidoRepository.save(pedido);
@@ -267,6 +267,27 @@ public class CoPrincipal {
 	@GetMapping("/admin/anadirProducto")
 	public String mostrarFormularioProducto() {	    
 		return "anadirProducto";
+	}
+	
+	@PostMapping("/admin/guardar-producto")
+	public String guardarProducto(@RequestParam String nombre,
+	                              @RequestParam double precio,
+	                              @RequestParam String imagenUrl,
+	                              @RequestParam(required = false) String disponible,
+	                              Model model) {
+
+	    if (nombre.isEmpty() || imagenUrl.isEmpty()) {
+	        model.addAttribute("mensaje", "Todos los campos son obligatorios");
+	        return "anadirProducto";
+	    }
+
+	    boolean disponibleBool = (disponible != null);
+
+	    Producto producto = new Producto(nombre, precio, imagenUrl, disponibleBool);
+	    productoRepository.save(producto);
+
+	    model.addAttribute("mensaje", "Producto añadido correctamente");
+	    return "anadirProducto";
 	}
 	
 	@GetMapping("/admin/permisos")
