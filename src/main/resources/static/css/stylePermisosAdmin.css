@@ -1,0 +1,26 @@
+.container h2 {
+    text-align: center;
+    font-weight: 700;
+    color: black;
+    margin-bottom: 30px;
+    position: relative;
+}
+table {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border: none;
+}
+table thead th {
+    border: none;
+    padding: 18px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+table tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    border-color: #eef2f7;
+}
